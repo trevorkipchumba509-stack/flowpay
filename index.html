@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FlowPay — Send Money Worldwide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#f0f4ff;
+  --white:#ffffff;
+  --primary:#1a3cff;
+  --primary-dark:#1230cc;
+  --primary-light:#e8edff;
+  --green:#00c48c;
+  --red:#ff4757;
+  --text:#0d1225;
+  --muted:#7a84a3;
+  --border:#e2e7f5;
+  --card:#ffffff;
+  --sidebar:#0d1225;
+  --sidebar-text:#8a95b5;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+
+/* ── LANDING ── */
+#landing{display:flex;flex-direction:column;min-height:100vh;}
+
+/* NAV */
+.land-nav{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.4rem 6%;
+  background:var(--white);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:50;
+}
+.brand{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--text);}
+.brand span{color:var(--primary);}
+.land-links{display:flex;gap:2rem;list-style:none;}
+.land-links a{text-decoration:none;color:var(--muted);font-size:0.875rem;font-weight:500;transition:color .2s;}
+.land-links a:hover{color:var(--primary);}
+.land-nav-btns{display:flex;gap:0.8rem;}
+.btn-ghost{padding:.55rem 1.3rem;border:1.5px solid var(--border);background:transparent;color:var(--text);font-family:'Inter',sans-serif;font-size:.85rem;font-weight:500;cursor:pointer;border-radius:8px;transition:all .2s;}
+.btn-ghost:hover{border-color:var(--primary);color:var(--primary);}
+.btn-solid{padding:.55rem 1.4rem;border:none;background:var(--primary);color:#fff;font-family:'Inter',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;border-radius:8px;transition:all .2s;}
+.btn-solid:hover{background:var(--primary-dark);transform:translateY(-1px);}
+
+/* HERO */
+.hero{
+  flex:1;display:grid;grid-template-columns:1fr 1fr;
+  gap:4rem;align-items:center;
+  padding:6rem 6%;
+  position:relative;overflow:hidden;
+}
+.hero-blob{
+  position:absolute;top:-100px;right:-100px;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle, rgba(26,60,255,0.08) 0%, transparent 70%);
+  pointer-events:none;
+}
+.hero-left{position:relative;z-index:1;animation:fadeUp .8s ease both;}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.4rem 1rem;background:var(--primary-light);
+  border-radius:20px;font-size:.75rem;font-weight:600;
+  color:var(--primary);letter-spacing:.05em;margin-bottom:1.5rem;
+}
+.hero-badge::before{content:'●';font-size:.5rem;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+h1.hero-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(2.5rem,4.5vw,3.8rem);
+  font-weight:800;line-height:1.1;
+  margin-bottom:1.2rem;color:var(--text);
+}
+h1.hero-title span{color:var(--primary);}
+.hero-sub{font-size:1.05rem;color:var(--muted);line-height:1.8;max-width:460px;margin-bottom:2.2rem;font-weight:300;}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;}
+.hero-cta{
+  padding:.9rem 2.2rem;background:var(--primary);color:#fff;
+  border:none;font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;
+  border-radius:10px;cursor:pointer;transition:all .25s;
+}
+.hero-cta:hover{background:var(--primary-dark);transform:translateY(-2px);box-shadow:0 8px 24px rgba(26,60,255,.25);}
+.hero-cta2{
+  padding:.9rem 2.2rem;background:transparent;color:var(--text);
+  border:1.5px solid var(--border);font-family:'Inter',sans-serif;font-size:.9rem;font-weight:500;
+  border-radius:10px;cursor:pointer;transition:all .25s;
+}
+.hero-cta2:hover{border-color:var(--primary);color:var(--primary);}
+
+/* SEND WIDGET */
+.send-widget{
+  background:var(--white);border-radius:20px;
+  padding:2rem;box-shadow:0 20px 60px rgba(26,60,255,.1);
+  position:relative;z-index:1;
+  animation:fadeUp .8s .2s ease both;
+}
+.widget-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:1.5rem;color:var(--text);}
+.widget-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;}
+.wtab{
+  flex:1;padding:.6rem;text-align:center;border-radius:8px;
+  font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;
+  border:1.5px solid var(--border);color:var(--muted);background:transparent;
+  font-family:'Inter',sans-serif;
+}
+.wtab.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+.field-label{font-size:.72rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem;}
+.field-row{display:grid;grid-template-columns:1fr auto;gap:.6rem;margin-bottom:1rem;}
+.field-input{
+  width:100%;padding:.75rem 1rem;
+  border:1.5px solid var(--border);border-radius:8px;
+  font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;color:var(--text);
+  outline:none;transition:border .2s;
+}
+.field-input:focus{border-color:var(--primary);}
+.currency-btn{
+  padding:.75rem 1rem;border:1.5px solid var(--border);border-radius:8px;
+  background:var(--bg);font-size:.9rem;font-weight:600;color:var(--text);
+  cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif;
+}
+.swap-btn{
+  display:flex;align-items:center;justify-content:center;
+  width:36px;height:36px;border-radius:50%;
+  background:var(--primary-light);color:var(--primary);
+  border:none;cursor:pointer;font-size:1rem;margin:0 auto .8rem;
+  transition:transform .3s;
+}
+.swap-btn:hover{transform:rotate(180deg);}
+.rate-info{
+  background:var(--bg);border-radius:10px;padding:.9rem 1rem;
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:1.2rem;font-size:.82rem;
+}
+.rate-val{font-weight:700;color:var(--primary);}
+.send-now-btn{
+  width:100%;padding:.9rem;background:var(--primary);color:#fff;
+  border:none;border-radius:10px;font-family:'Syne',sans-serif;
+  font-size:1rem;font-weight:700;cursor:pointer;transition:all .25s;
+}
+.send-now-btn:hover{background:var(--primary-dark);transform:translateY(-1px);}
+
+/* TRUST BAR */
+.trust-bar{
+  background:var(--white);border-top:1px solid var(--border);
+  padding:1.8rem 6%;display:flex;justify-content:center;
+  gap:4rem;flex-wrap:wrap;
+}
+.trust-item{display:flex;align-items:center;gap:.6rem;font-size:.85rem;color:var(--muted);font-weight:500;}
+.trust-icon{font-size:1.2rem;}
+
+/* FEATURES */
+.features{padding:6rem 6%;background:var(--white);}
+.feat-header{text-align:center;margin-bottom:4rem;}
+.feat-header h2{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:var(--text);margin-bottom:.8rem;}
+.feat-header p{color:var(--muted);font-size:1rem;}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+.feat-card{
+  padding:2rem;border-radius:16px;background:var(--bg);
+  border:1.5px solid transparent;transition:all .3s;
+}
+.feat-card:hover{border-color:var(--primary);background:var(--white);transform:translateY(-4px);box-shadow:0 12px 40px rgba(26,60,255,.08);}
+.feat-icon{font-size:2rem;margin-bottom:1rem;}
+.feat-title{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:.5rem;}
+.feat-desc{font-size:.875rem;color:var(--muted);line-height:1.7;}
+
+/* ── APP SHELL (Dashboard) ── */
+#app{display:none;min-height:100vh;flex-direction:row;}
+
+.sidebar{
+  width:240px;flex-shrink:0;background:var(--sidebar);
+  display:flex;flex-direction:column;padding:1.8rem 0;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+}
+.sb-brand{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;color:#fff;padding:0 1.5rem 2rem;}
+.sb-brand span{color:var(--primary);}
+.sb-section{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#3a4466;padding:.5rem 1.5rem;margin-top:1rem;}
+.sb-link{
+  display:flex;align-items:center;gap:.8rem;
+  padding:.75rem 1.5rem;color:var(--sidebar-text);
+  text-decoration:none;font-size:.875rem;font-weight:500;
+  transition:all .2s;cursor:pointer;border:none;background:none;
+  width:100%;text-align:left;font-family:'Inter',sans-serif;
+}
+.sb-link:hover{color:#fff;background:rgba(255,255,255,.05);}
+.sb-link.active{color:#fff;background:rgba(26,60,255,.3);border-right:3px solid var(--primary);}
+.sb-icon{font-size:1rem;width:20px;text-align:center;}
+.sb-footer{margin-top:auto;padding:1.5rem;}
+.sb-user{display:flex;align-items:center;gap:.8rem;}
+.sb-avatar{width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;color:#fff;}
+.sb-name{font-size:.85rem;font-weight:600;color:#fff;}
+.sb-role{font-size:.72rem;color:var(--sidebar-text);}
+
+.main-content{flex:1;overflow-y:auto;background:var(--bg);padding:2.5rem;}
+
+/* TOPBAR */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:2.5rem;}
+.topbar-title{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--text);}
+.topbar-right{display:flex;align-items:center;gap:1rem;}
+.notif-btn{
+  width:38px;height:38px;border-radius:10px;border:1.5px solid var(--border);
+  background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:1rem;position:relative;
+}
+.notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;background:var(--red);border-radius:50%;border:2px solid var(--white);}
+
+/* PAGES */
+.page{display:none;}
+.page.active{display:block;}
+
+/* DASHBOARD */
+.balance-card{
+  background:linear-gradient(135deg,var(--primary) 0%,#0a25c9 100%);
+  border-radius:20px;padding:2rem 2.5rem;color:#fff;
+  margin-bottom:2rem;position:relative;overflow:hidden;
+}
+.balance-card::before{
+  content:'';position:absolute;top:-60px;right:-60px;
+  width:200px;height:200px;border-radius:50%;
+  background:rgba(255,255,255,.07);
+}
+.balance-card::after{
+  content:'';position:absolute;bottom:-40px;right:80px;
+  width:140px;height:140px;border-radius:50%;
+  background:rgba(255,255,255,.05);
+}
+.bal-label{font-size:.8rem;font-weight:500;opacity:.7;margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.06em;}
+.bal-amount{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;margin-bottom:.3rem;}
+.bal-sub{font-size:.85rem;opacity:.65;}
+.bal-actions{display:flex;gap:.8rem;margin-top:1.5rem;}
+.bal-btn{
+  padding:.6rem 1.5rem;border-radius:8px;font-family:'Inter',sans-serif;
+  font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;
+}
+.bal-btn-white{background:#fff;color:var(--primary);border:none;}
+.bal-btn-white:hover{background:rgba(255,255,255,.9);}
+.bal-btn-outline{background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.3);}
+.bal-btn-outline:hover{background:rgba(255,255,255,.25);}
+
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-bottom:2rem;}
+.stat-card{background:var(--white);border-radius:14px;padding:1.4rem 1.6rem;border:1.5px solid var(--border);}
+.stat-card-label{font-size:.75rem;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem;}
+.stat-card-val{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;color:var(--text);}
+.stat-card-change{font-size:.78rem;font-weight:600;margin-top:.3rem;}
+.up{color:var(--green);}
+.dn{color:var(--red);}
+
+.dash-grid{display:grid;grid-template-columns:1fr 340px;gap:1.5rem;}
+
+/* QUICK SEND */
+.panel{background:var(--white);border-radius:16px;padding:1.6rem;border:1.5px solid var(--border);}
+.panel-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:1.2rem;color:var(--text);}
+.contacts-row{display:flex;gap:.8rem;margin-bottom:1.2rem;flex-wrap:wrap;}
+.contact-chip{
+  display:flex;flex-direction:column;align-items:center;gap:.4rem;
+  cursor:pointer;
+}
+.contact-avatar{
+  width:46px;height:46px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:.9rem;color:#fff;font-family:'Syne',sans-serif;
+}
+.contact-name{font-size:.7rem;color:var(--muted);font-weight:500;}
+.add-contact{
+  width:46px;height:46px;border-radius:50%;
+  border:2px dashed var(--border);background:transparent;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;color:var(--muted);cursor:pointer;
+}
+
+/* TRANSACTIONS */
+.tx-list{display:flex;flex-direction:column;gap:.6rem;}
+.tx-item{
+  display:flex;align-items:center;gap:1rem;
+  padding:.9rem 1rem;border-radius:10px;
+  background:var(--bg);transition:background .2s;cursor:pointer;
+}
+.tx-item:hover{background:#e8edff;}
+.tx-icon{
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;flex-shrink:0;
+}
+.tx-icon.send{background:#fff0f3;}
+.tx-icon.recv{background:#f0fff8;}
+.tx-info{flex:1;}
+.tx-name{font-size:.875rem;font-weight:600;color:var(--text);}
+.tx-meta{font-size:.75rem;color:var(--muted);margin-top:.1rem;}
+.tx-amount{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;}
+.tx-amount.send{color:var(--red);}
+.tx-amount.recv{color:var(--green);}
+
+/* EXCHANGE RATES PAGE */
+.rates-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;}
+.search-bar{
+  padding:.65rem 1rem;border:1.5px solid var(--border);border-radius:8px;
+  font-family:'Inter',sans-serif;font-size:.875rem;outline:none;
+  width:240px;transition:border .2s;
+}
+.search-bar:focus{border-color:var(--primary);}
+.rates-table{width:100%;border-collapse:collapse;background:var(--white);border-radius:16px;overflow:hidden;border:1.5px solid var(--border);}
+.rates-table th{
+  background:var(--bg);padding:1rem 1.4rem;
+  text-align:left;font-size:.72rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+  border-bottom:1.5px solid var(--border);
+}
+.rates-table td{
+  padding:1rem 1.4rem;font-size:.875rem;
+  border-bottom:1px solid var(--border);
+}
+.rates-table tr:last-child td{border-bottom:none;}
+.rates-table tr:hover td{background:var(--bg);}
+.flag{font-size:1.2rem;margin-right:.5rem;}
+.curr-name{font-weight:600;}
+.curr-full{font-size:.78rem;color:var(--muted);}
+.rate-badge{
+  display:inline-block;padding:.25rem .6rem;border-radius:20px;
+  font-size:.72rem;font-weight:700;
+}
+.rate-up{background:#f0fff8;color:var(--green);}
+.rate-dn{background:#fff0f3;color:var(--red);}
+
+/* SEND MONEY PAGE */
+.send-steps{display:flex;gap:.5rem;margin-bottom:2rem;align-items:center;}
+.step{
+  display:flex;align-items:center;gap:.5rem;
+  font-size:.8rem;font-weight:600;color:var(--muted);
+}
+.step.active{color:var(--primary);}
+.step.done{color:var(--green);}
+.step-num{
+  width:26px;height:26px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;font-weight:700;
+  border:2px solid currentColor;
+}
+.step-done-icon{font-size:1rem;}
+.step-divider{flex:1;height:2px;background:var(--border);max-width:40px;}
+.send-form-card{background:var(--white);border-radius:16px;padding:2rem;border:1.5px solid var(--border);max-width:560px;}
+.sf-label{font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem;display:block;}
+.sf-input{
+  width:100%;padding:.8rem 1rem;border:1.5px solid var(--border);border-radius:8px;
+  font-family:'Inter',sans-serif;font-size:.95rem;color:var(--text);
+  outline:none;transition:border .2s;margin-bottom:1.1rem;
+}
+.sf-input:focus{border-color:var(--primary);}
+.sf-row{display:grid;grid-template-columns:1fr auto;gap:.6rem;margin-bottom:1.1rem;}
+.sf-select{
+  padding:.8rem 1rem;border:1.5px solid var(--border);border-radius:8px;
+  font-family:'Inter',sans-serif;font-size:.9rem;color:var(--text);
+  background:var(--bg);outline:none;cursor:pointer;
+}
+.convert-box{
+  background:var(--primary-light);border-radius:10px;
+  padding:1rem 1.2rem;margin-bottom:1.2rem;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.convert-label{font-size:.8rem;color:var(--primary);font-weight:500;}
+.convert-val{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--primary);}
+.send-submit{
+  width:100%;padding:.9rem;background:var(--primary);color:#fff;
+  border:none;border-radius:10px;font-family:'Syne',sans-serif;
+  font-size:1rem;font-weight:700;cursor:pointer;transition:all .25s;margin-top:.5rem;
+}
+.send-submit:hover{background:var(--primary-dark);transform:translateY(-1px);}
+
+/* HISTORY */
+.hist-filters{display:flex;gap:.6rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.filter-btn{
+  padding:.45rem 1rem;border-radius:20px;border:1.5px solid var(--border);
+  background:var(--white);font-size:.8rem;font-weight:600;color:var(--muted);
+  cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;
+}
+.filter-btn.active,.filter-btn:hover{background:var(--primary);color:#fff;border-color:var(--primary);}
+.hist-table{width:100%;border-collapse:collapse;background:var(--white);border-radius:16px;overflow:hidden;border:1.5px solid var(--border);}
+.hist-table th{background:var(--bg);padding:.9rem 1.2rem;text-align:left;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1.5px solid var(--border);}
+.hist-table td{padding:.9rem 1.2rem;font-size:.858rem;border-bottom:1px solid var(--border);}
+.hist-table tr:last-child td{border-bottom:none;}
+.hist-table tr:hover td{background:var(--bg);}
+.status-badge{display:inline-block;padding:.2rem .7rem;border-radius:20px;font-size:.72rem;font-weight:700;}
+.status-completed{background:#f0fff8;color:var(--green);}
+.status-pending{background:#fffbf0;color:#f59e0b;}
+.status-failed{background:#fff0f3;color:var(--red);}
+
+/* SUCCESS MODAL */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(13,18,37,.5);
+  backdrop-filter:blur(4px);display:none;
+  align-items:center;justify-content:center;z-index:999;
+}
+.modal-overlay.show{display:flex;}
+.modal{
+  background:var(--white);border-radius:20px;
+  padding:3rem 2.5rem;text-align:center;max-width:380px;width:90%;
+  animation:popIn .4s ease;
+}
+@keyframes popIn{from{transform:scale(.8);opacity:0;}to{transform:scale(1);opacity:1;}}
+.modal-icon{font-size:3.5rem;margin-bottom:1rem;}
+.modal-title{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:.5rem;}
+.modal-sub{font-size:.9rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;}
+.modal-close{
+  padding:.75rem 2rem;background:var(--primary);color:#fff;
+  border:none;border-radius:10px;font-family:'Syne',sans-serif;
+  font-size:.9rem;font-weight:700;cursor:pointer;
+}
+
+/* ── HELP PAGE ── */
+.help-layout{display:grid;grid-template-columns:260px 1fr;gap:1.5rem;height:calc(100vh - 140px);}
+.help-topics{background:var(--white);border-radius:16px;padding:1.4rem;border:1.5px solid var(--border);overflow-y:auto;}
+.topic-list{display:flex;flex-direction:column;gap:.5rem;}
+.topic-btn{
+  padding:.7rem 1rem;text-align:left;border:1.5px solid var(--border);
+  border-radius:10px;background:var(--bg);color:var(--text);
+  font-family:'Inter',sans-serif;font-size:.84rem;font-weight:500;
+  cursor:pointer;transition:all .2s;
+}
+.topic-btn:hover{border-color:var(--primary);background:var(--primary-light);color:var(--primary);}
+.help-chat-wrap{
+  background:var(--white);border-radius:16px;border:1.5px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.chat-box{flex:1;overflow-y:auto;padding:1.4rem;display:flex;flex-direction:column;gap:1rem;}
+.chat-msg{display:flex;gap:.75rem;align-items:flex-end;}
+.chat-msg.user{flex-direction:row-reverse;}
+.chat-avatar{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.9rem;}
+.bot-av{background:var(--primary-light);}
+.user-av{background:var(--primary);color:#fff;font-weight:700;font-size:.78rem;}
+.chat-bubble{
+  max-width:75%;padding:.8rem 1.1rem;border-radius:16px;
+  font-size:.875rem;line-height:1.6;
+}
+.chat-msg.bot .chat-bubble{background:var(--bg);color:var(--text);border-bottom-left-radius:4px;}
+.chat-msg.user .chat-bubble{background:var(--primary);color:#fff;border-bottom-right-radius:4px;}
+.chat-msg.typing .chat-bubble{display:flex;gap:.3rem;align-items:center;padding:.9rem 1.2rem;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:bounce .9s infinite;}
+.dot:nth-child(2){animation-delay:.15s;}
+.dot:nth-child(3){animation-delay:.3s;}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-6px);}}
+.chat-input-row{display:flex;gap:.6rem;padding:1rem 1.2rem;border-top:1.5px solid var(--border);}
+.chat-input{
+  flex:1;padding:.75rem 1rem;border:1.5px solid var(--border);border-radius:10px;
+  font-family:'Inter',sans-serif;font-size:.875rem;outline:none;
+  transition:border .2s;
+}
+.chat-input:focus{border-color:var(--primary);}
+.chat-send-btn{
+  padding:.75rem 1.4rem;background:var(--primary);color:#fff;border:none;
+  border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:.875rem;
+  cursor:pointer;transition:all .2s;white-space:nowrap;
+}
+.chat-send-btn:hover{background:var(--primary-dark);}
+
+/* FLOATING HELP */
+.float-help-btn{
+  position:fixed;bottom:2rem;right:2rem;
+  width:56px;height:56px;border-radius:50%;
+  background:var(--primary);color:#fff;border:none;
+  font-size:1.4rem;cursor:pointer;z-index:900;
+  box-shadow:0 8px 24px rgba(26,60,255,.35);
+  transition:transform .2s,box-shadow .2s;
+  display:none;
+}
+.float-help-btn:hover{transform:scale(1.1);box-shadow:0 12px 32px rgba(26,60,255,.45);}
+.float-chat-widget{
+  position:fixed;bottom:5.5rem;right:2rem;
+  width:340px;background:var(--white);border-radius:18px;
+  box-shadow:0 20px 60px rgba(13,18,37,.18);
+  border:1.5px solid var(--border);z-index:901;
+  display:none;flex-direction:column;overflow:hidden;
+  animation:popIn .3s ease;
+}
+.float-chat-widget.open{display:flex;}
+.float-chat-header{
+  background:var(--primary);padding:1rem 1.2rem;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.float-chat-body{height:280px;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.8rem;}
+.float-chat-input-row{display:flex;gap:.5rem;padding:.8rem;border-top:1.5px solid var(--border);}
+
+@media(max-width:900px){
+  .help-layout{grid-template-columns:1fr;height:auto;}
+  .float-help-btn{display:flex;align-items:center;justify-content:center;}
+}
+
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;padding:4rem 6%;}
+  .send-widget{display:none;}
+  .feat-grid{grid-template-columns:1fr 1fr;}
+  .sidebar{display:none;}
+  .stats-row{grid-template-columns:1fr 1fr;}
+  .dash-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ LANDING PAGE ═══════════════ -->
+<div id="landing">
+
+  <nav class="land-nav">
+    <div class="brand">Flow<span>Pay</span></div>
+    <ul class="land-links">
+      <li><a href="#">Personal</a></li>
+      <li><a href="#">Business</a></li>
+      <li><a href="#">Rates</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    <div class="land-nav-btns">
+      <button class="btn-ghost" onclick="showApp()">Log In</button>
+      <button class="btn-solid" onclick="showApp()">Get Started</button>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-blob"></div>
+    <div class="hero-left">
+      <div class="hero-badge">🌍 Available in 150+ countries</div>
+      <h1 class="hero-title">Send Money<br><span>Anywhere,</span><br>Instantly.</h1>
+      <p class="hero-sub">FlowPay makes local and international money transfers fast, affordable, and secure. Real exchange rates. Zero hidden fees.</p>
+      <div class="hero-btns">
+        <button class="hero-cta" onclick="showApp()">Start Sending →</button>
+        <button class="hero-cta2">See Rates</button>
+      </div>
+    </div>
+    <div class="send-widget">
+      <div class="widget-title">Quick Transfer</div>
+      <div class="widget-tabs">
+        <button class="wtab active" onclick="setTab(this)">Send</button>
+        <button class="wtab" onclick="setTab(this)">Receive</button>
+        <button class="wtab" onclick="setTab(this)">Exchange</button>
+      </div>
+      <div>
+        <div class="field-label">You Send</div>
+        <div class="field-row">
+          <input type="number" class="field-input" id="send-amount" value="1000" oninput="calcRate()"/>
+          <select class="currency-btn" id="from-curr" onchange="calcRate()">
+            <option>USD 🇺🇸</option><option>EUR 🇪🇺</option><option>GBP 🇬🇧</option><option>CAD 🇨🇦</option>
+          </select>
+        </div>
+        <button class="swap-btn" onclick="swapCurr()">⇅</button>
+        <div class="field-label">Recipient Gets</div>
+        <div class="field-row">
+          <input type="number" class="field-input" id="recv-amount" value="845.20"/>
+          <select class="currency-btn" id="to-curr" onchange="calcRate()">
+            <option>EUR 🇪🇺</option><option>USD 🇺🇸</option><option>GBP 🇬🇧</option><option>NGN 🇳🇬</option><option>JPY 🇯🇵</option><option>INR 🇮🇳</option>
+          </select>
+        </div>
+        <div class="rate-info">
+          <span>1 USD = <span id="rate-display">0.8452 EUR</span></span>
+          <span class="rate-val">No fees 🎉</span>
+        </div>
+        <button class="send-now-btn" onclick="showApp()">Send Now →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="trust-bar">
+    <div class="trust-item"><span class="trust-icon">🔒</span> Bank-level encryption</div>
+    <div class="trust-item"><span class="trust-icon">⚡</span> Transfers in minutes</div>
+    <div class="trust-item"><span class="trust-icon">💸</span> Best exchange rates</div>
+    <div class="trust-item"><span class="trust-icon">🌍</span> 150+ countries</div>
+    <div class="trust-item"><span class="trust-icon">⭐</span> 4.9/5 rating</div>
+  </div>
+
+  <div class="features">
+    <div class="feat-header">
+      <h2>Everything you need to move money</h2>
+      <p>Powerful features built for individuals and businesses</p>
+    </div>
+    <div class="feat-grid">
+      <div class="feat-card">
+        <div class="feat-icon">🚀</div>
+        <div class="feat-title">Lightning Fast</div>
+        <p class="feat-desc">Most transfers arrive within minutes. Send to 150+ countries with real-time tracking.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📊</div>
+        <div class="feat-title">Live Exchange Rates</div>
+        <p class="feat-desc">Always get the real mid-market rate. No markup, no surprises — just transparent pricing.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🔐</div>
+        <div class="feat-title">Secure & Regulated</div>
+        <p class="feat-desc">Licensed and regulated. Your money is protected with 256-bit AES encryption and 2FA.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📱</div>
+        <div class="feat-title">Mobile Ready</div>
+        <p class="feat-desc">Send, receive, and track transfers from anywhere. Available on iOS and Android.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">🏦</div>
+        <div class="feat-title">Multi-Currency Wallet</div>
+        <p class="feat-desc">Hold balances in 30+ currencies and convert at the perfect moment.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-icon">📈</div>
+        <div class="feat-title">Business Transfers</div>
+        <p class="feat-desc">Bulk payouts, invoicing, and API access for businesses of any size.</p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end landing -->
+
+
+<!-- ═══════════════ APP DASHBOARD ═══════════════ -->
+<div id="app" style="display:none;flex-direction:row;">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-brand">Flow<span>Pay</span></div>
+    <div class="sb-section">Main</div>
+    <button class="sb-link active" onclick="showPage('dashboard',this)"><span class="sb-icon">⊞</span> Dashboard</button>
+    <button class="sb-link" onclick="showPage('send',this)"><span class="sb-icon">↗</span> Send Money</button>
+    <button class="sb-link" onclick="showPage('history',this)"><span class="sb-icon">≡</span> Transactions</button>
+    <button class="sb-link" onclick="showPage('rates',this)"><span class="sb-icon">◈</span> Exchange Rates</button>
+    <div class="sb-section">Account</div>
+    <button class="sb-link" onclick="showPage('help',this)"><span class="sb-icon">💬</span> Help & Support</button>
+    <button class="sb-link"><span class="sb-icon">⚙</span> Settings</button>
+    <button class="sb-link" onclick="showLanding()"><span class="sb-icon">←</span> Log Out</button>
+    <div class="sb-footer">
+      <div class="sb-user">
+        <div class="sb-avatar">AJ</div>
+        <div><div class="sb-name">Alex Johnson</div><div class="sb-role">Personal Account</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- DASHBOARD PAGE -->
+    <div class="page active" id="page-dashboard">
+      <div class="topbar">
+        <div class="topbar-title">Good morning, Alex 👋</div>
+        <div class="topbar-right">
+          <div class="notif-btn">🔔<div class="notif-dot"></div></div>
+        </div>
+      </div>
+
+      <div class="balance-card">
+        <div class="bal-label">Total Balance</div>
+        <div class="bal-amount">$12,480.50</div>
+        <div class="bal-sub">Across 3 currencies · Last updated just now</div>
+        <div class="bal-actions">
+          <button class="bal-btn bal-btn-white" onclick="showPage('send', document.querySelector('.sb-link:nth-child(5)'))">↗ Send</button>
+          <button class="bal-btn bal-btn-outline">↙ Receive</button>
+          <button class="bal-btn bal-btn-outline">+ Add Funds</button>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-card-label">Sent This Month</div>
+          <div class="stat-card-val">$3,240</div>
+          <div class="stat-card-change up">↑ 12% vs last month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Received</div>
+          <div class="stat-card-val">$5,810</div>
+          <div class="stat-card-change up">↑ 8% vs last month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Saved in Fees</div>
+          <div class="stat-card-val">$124</div>
+          <div class="stat-card-change up">vs traditional banks</div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="panel">
+          <div class="panel-title">Quick Send</div>
+          <div class="contacts-row">
+            <div class="contact-chip">
+              <div class="contact-avatar" style="background:#e74c3c">MK</div>
+              <div class="contact-name">Maria</div>
+            </div>
+            <div class="contact-chip">
+              <div class="contact-avatar" style="background:#2ecc71">JD</div>
+              <div class="contact-name">James</div>
+            </div>
+            <div class="contact-chip">
+              <div class="contact-avatar" style="background:#f39c12">SL</div>
+              <div class="contact-name">Sofia</div>
+            </div>
+            <div class="contact-chip">
+              <div class="contact-avatar" style="background:#9b59b6">TN</div>
+              <div class="contact-name">Tom</div>
+            </div>
+            <div class="contact-chip">
+              <button class="add-contact">+</button>
+              <div class="contact-name">New</div>
+            </div>
+          </div>
+          <div class="panel-title" style="margin-top:1rem">Recent Transactions</div>
+          <div class="tx-list">
+            <div class="tx-item">
+              <div class="tx-icon send">↗</div>
+              <div class="tx-info"><div class="tx-name">Maria Kowalski</div><div class="tx-meta">Sent · EUR · Today, 10:24 AM</div></div>
+              <div class="tx-amount send">-$250.00</div>
+            </div>
+            <div class="tx-item">
+              <div class="tx-icon recv">↙</div>
+              <div class="tx-info"><div class="tx-name">James Doe</div><div class="tx-meta">Received · USD · Yesterday</div></div>
+              <div class="tx-amount recv">+$1,500.00</div>
+            </div>
+            <div class="tx-item">
+              <div class="tx-icon send">↗</div>
+              <div class="tx-info"><div class="tx-name">Sofia Lim</div><div class="tx-meta">Sent · SGD · Mar 5</div></div>
+              <div class="tx-amount send">-$420.00</div>
+            </div>
+            <div class="tx-item">
+              <div class="tx-icon recv">↙</div>
+              <div class="tx-info"><div class="tx-name">Freelance Payment</div><div class="tx-meta">Received · GBP · Mar 4</div></div>
+              <div class="tx-amount recv">+$820.00</div>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:1.2rem;">
+          <div class="panel">
+            <div class="panel-title">Live Rates</div>
+            <div style="display:flex;flex-direction:column;gap:.7rem;">
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:.875rem;">
+                <span>🇺🇸 USD → 🇪🇺 EUR</span><span style="font-weight:700;color:var(--primary)">0.9251 <span style="color:var(--green);font-size:.75rem">▲</span></span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:.875rem;">
+                <span>🇺🇸 USD → 🇬🇧 GBP</span><span style="font-weight:700;color:var(--primary)">0.7843 <span style="color:var(--red);font-size:.75rem">▼</span></span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:.875rem;">
+                <span>🇺🇸 USD → 🇯🇵 JPY</span><span style="font-weight:700;color:var(--primary)">149.32 <span style="color:var(--green);font-size:.75rem">▲</span></span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;font-size:.875rem;">
+                <span>🇺🇸 USD → 🇮🇳 INR</span><span style="font-weight:700;color:var(--primary)">83.12 <span style="color:var(--green);font-size:.75rem">▲</span></span>
+              </div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-title">My Wallets</div>
+            <div style="display:flex;flex-direction:column;gap:.7rem;">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem .8rem;background:var(--bg);border-radius:8px;">
+                <span style="font-size:.875rem;font-weight:600;">🇺🇸 USD</span><span style="font-family:'Syne',sans-serif;font-weight:800;">$8,240.50</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem .8rem;background:var(--bg);border-radius:8px;">
+                <span style="font-size:.875rem;font-weight:600;">🇪🇺 EUR</span><span style="font-family:'Syne',sans-serif;font-weight:800;">€3,120.00</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem .8rem;background:var(--bg);border-radius:8px;">
+                <span style="font-size:.875rem;font-weight:600;">🇬🇧 GBP</span><span style="font-family:'Syne',sans-serif;font-weight:800;">£880.00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEND MONEY PAGE -->
+    <div class="page" id="page-send">
+      <div class="topbar"><div class="topbar-title">Send Money</div></div>
+      <div class="send-steps">
+        <div class="step active" id="step1"><div class="step-num">1</div> Amount</div>
+        <div class="step-divider"></div>
+        <div class="step" id="step2"><div class="step-num">2</div> Recipient</div>
+        <div class="step-divider"></div>
+        <div class="step" id="step3"><div class="step-num">3</div> Confirm</div>
+      </div>
+      <div class="send-form-card" id="send-step1">
+        <div class="panel-title">How much are you sending?</div>
+        <label class="sf-label">You Send</label>
+        <div class="sf-row">
+          <input type="number" class="sf-input" id="s-amount" value="500" oninput="updateConvert()"/>
+          <select class="sf-select" id="s-from" onchange="updateConvert()">
+            <option>USD 🇺🇸</option><option>EUR 🇪🇺</option><option>GBP 🇬🇧</option>
+          </select>
+        </div>
+        <label class="sf-label">Recipient Gets (approx.)</label>
+        <div class="sf-row">
+          <input type="number" class="sf-input" id="s-recv" value="462.55" readonly style="background:var(--bg);"/>
+          <select class="sf-select" id="s-to" onchange="updateConvert()">
+            <option>EUR 🇪🇺</option><option>USD 🇺🇸</option><option>GBP 🇬🇧</option><option>NGN 🇳🇬</option><option>JPY 🇯🇵</option><option>INR 🇮🇳</option><option>CAD 🇨🇦</option>
+          </select>
+        </div>
+        <div class="convert-box">
+          <div class="convert-label">Exchange Rate</div>
+          <div class="convert-val" id="s-rate-display">1 USD = 0.9251 EUR</div>
+        </div>
+        <button class="send-submit" onclick="nextStep(2)">Continue →</button>
+      </div>
+      <div class="send-form-card" id="send-step2" style="display:none;">
+        <div class="panel-title">Recipient Details</div>
+        <label class="sf-label">Full Name</label>
+        <input type="text" class="sf-input" placeholder="e.g. Maria Kowalski"/>
+        <label class="sf-label">Email or Phone</label>
+        <input type="text" class="sf-input" placeholder="email@example.com or +1 555 000"/>
+        <label class="sf-label">Bank Account / IBAN</label>
+        <input type="text" class="sf-input" placeholder="Account number or IBAN"/>
+        <label class="sf-label">Transfer Note (optional)</label>
+        <input type="text" class="sf-input" placeholder="e.g. Rent for March"/>
+        <button class="send-submit" onclick="nextStep(3)">Review Transfer →</button>
+      </div>
+      <div class="send-form-card" id="send-step3" style="display:none;">
+        <div class="panel-title">Confirm Transfer</div>
+        <div style="background:var(--bg);border-radius:12px;padding:1.2rem;margin-bottom:1.2rem;display:flex;flex-direction:column;gap:.8rem;">
+          <div style="display:flex;justify-content:space-between;font-size:.875rem;"><span style="color:var(--muted)">You send</span><span style="font-weight:700;" id="confirm-send">$500.00 USD</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:.875rem;"><span style="color:var(--muted)">Recipient gets</span><span style="font-weight:700;color:var(--green);" id="confirm-recv">€462.55 EUR</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:.875rem;"><span style="color:var(--muted)">Transfer fee</span><span style="font-weight:700;color:var(--green)">Free 🎉</span></div>
+          <div style="height:1px;background:var(--border);"></div>
+          <div style="display:flex;justify-content:space-between;font-size:.875rem;"><span style="color:var(--muted)">Estimated arrival</span><span style="font-weight:700;">Within 2 minutes</span></div>
+        </div>
+        <button class="send-submit" onclick="confirmSend()">Confirm & Send Money 🚀</button>
+        <button onclick="nextStep(1)" style="width:100%;margin-top:.6rem;padding:.7rem;border:1.5px solid var(--border);border-radius:10px;background:transparent;font-family:'Inter',sans-serif;font-size:.875rem;font-weight:600;cursor:pointer;color:var(--muted);">← Edit Details</button>
+      </div>
+    </div>
+
+    <!-- EXCHANGE RATES PAGE -->
+    <div class="page" id="page-rates">
+      <div class="topbar"><div class="topbar-title">Exchange Rates</div></div>
+      <div class="rates-header">
+        <p style="color:var(--muted);font-size:.875rem;">Live mid-market rates · Updated every minute</p>
+        <input type="text" class="search-bar" placeholder="🔍 Search currency..." oninput="filterRates(this.value)"/>
+      </div>
+      <table class="rates-table" id="rates-table">
+        <thead><tr><th>Currency</th><th>Rate (vs USD)</th><th>24h Change</th><th>Action</th></tr></thead>
+        <tbody id="rates-body"></tbody>
+      </table>
+    </div>
+
+    <!-- TRANSACTION HISTORY PAGE -->
+    <div class="page" id="page-history">
+      <div class="topbar"><div class="topbar-title">Transactions</div></div>
+      <div class="hist-filters">
+        <button class="filter-btn active" onclick="filterTx(this,'all')">All</button>
+        <button class="filter-btn" onclick="filterTx(this,'sent')">Sent</button>
+        <button class="filter-btn" onclick="filterTx(this,'received')">Received</button>
+        <button class="filter-btn" onclick="filterTx(this,'pending')">Pending</button>
+      </div>
+      <table class="hist-table" id="hist-table">
+        <thead><tr><th>Date</th><th>Recipient / Sender</th><th>Amount</th><th>Currency</th><th>Status</th></tr></thead>
+        <tbody id="hist-body"></tbody>
+      </table>
+    </div>
+
+    <!-- HELP PAGE -->
+    <div class="page" id="page-help">
+      <div class="topbar">
+        <div class="topbar-title">Help & Support 💬</div>
+        <div style="font-size:.85rem;color:var(--muted);">Powered by AI · Available 24/7</div>
+      </div>
+
+      <div class="help-layout">
+        <!-- QUICK TOPICS -->
+        <div class="help-topics">
+          <div class="panel-title" style="margin-bottom:1rem;">Common Questions</div>
+          <div class="topic-list">
+            <button class="topic-btn" onclick="askTopic('How long does an international transfer take?')">⏱ Transfer times</button>
+            <button class="topic-btn" onclick="askTopic('What are the fees for sending money?')">💸 Fees & charges</button>
+            <button class="topic-btn" onclick="askTopic('How do I cancel or reverse a transfer?')">↩ Cancel a transfer</button>
+            <button class="topic-btn" onclick="askTopic('Which countries does FlowPay support?')">🌍 Supported countries</button>
+            <button class="topic-btn" onclick="askTopic('How do I verify my identity on FlowPay?')">🪪 Identity verification</button>
+            <button class="topic-btn" onclick="askTopic('How do I add money to my FlowPay wallet?')">➕ Add funds</button>
+            <button class="topic-btn" onclick="askTopic('Is FlowPay safe and regulated?')">🔐 Security & safety</button>
+            <button class="topic-btn" onclick="askTopic('What currencies does FlowPay support?')">💱 Currencies</button>
+          </div>
+        </div>
+
+        <!-- CHAT -->
+        <div class="help-chat-wrap">
+          <div class="chat-box" id="chat-box">
+            <div class="chat-msg bot">
+              <div class="chat-avatar bot-av">🤖</div>
+              <div class="chat-bubble">
+                Hi! I'm FlowPay's AI assistant. I can help with transfers, exchange rates, account queries, and more. What can I help you with today?
+              </div>
+            </div>
+          </div>
+          <div class="chat-input-row">
+            <input
+              type="text"
+              id="chat-input"
+              class="chat-input"
+              placeholder="Type your question..."
+              onkeydown="if(event.key==='Enter')sendHelp()"
+            />
+            <button class="chat-send-btn" onclick="sendHelp()">Send ↑</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FLOATING HELP BUTTON -->
+<button class="float-help-btn" id="float-help" onclick="openFloatChat()" title="Need help?">💬</button>
+
+<!-- FLOATING CHAT WIDGET -->
+<div class="float-chat-widget" id="float-widget">
+  <div class="float-chat-header">
+    <div style="display:flex;align-items:center;gap:.6rem;">
+      <div style="width:32px;height:32px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-size:1rem;">🤖</div>
+      <div><div style="font-weight:700;font-size:.9rem;">FlowPay Support</div><div style="font-size:.72rem;color:rgba(255,255,255,.6);">AI · Always online</div></div>
+    </div>
+    <button onclick="closeFloatChat()" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;">✕</button>
+  </div>
+  <div class="float-chat-body" id="float-chat-body">
+    <div class="chat-msg bot">
+      <div class="chat-avatar bot-av">🤖</div>
+      <div class="chat-bubble">Hi! How can I help you with FlowPay today?</div>
+    </div>
+  </div>
+  <div class="float-chat-input-row">
+    <input type="text" id="float-input" class="chat-input" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sendFloat()"/>
+    <button class="chat-send-btn" onclick="sendFloat()">↑</button>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="success-modal">
+  <div class="modal">
+    <div class="modal-icon">🎉</div>
+    <div class="modal-title">Transfer Sent!</div>
+    <p class="modal-sub">Your money is on its way. The recipient should receive the funds within 2 minutes.</p>
+    <button class="modal-close" onclick="closeModal()">Back to Dashboard</button>
+  </div>
+</div>
+
+<script>
+// ── RATES DATA
+const ratesData = [
+  {flag:'🇪🇺',code:'EUR',name:'Euro',rate:0.9251,change:+0.12},
+  {flag:'🇬🇧',code:'GBP',name:'British Pound',rate:0.7843,change:-0.08},
+  {flag:'🇯🇵',code:'JPY',name:'Japanese Yen',rate:149.32,change:+0.45},
+  {flag:'🇨🇦',code:'CAD',name:'Canadian Dollar',rate:1.3621,change:+0.05},
+  {flag:'🇦🇺',code:'AUD',name:'Australian Dollar',rate:1.5412,change:-0.14},
+  {flag:'🇮🇳',code:'INR',name:'Indian Rupee',rate:83.12,change:+0.22},
+  {flag:'🇳🇬',code:'NGN',name:'Nigerian Naira',rate:1540.0,change:-1.20},
+  {flag:'🇨🇳',code:'CNY',name:'Chinese Yuan',rate:7.2341,change:+0.03},
+  {flag:'🇸🇬',code:'SGD',name:'Singapore Dollar',rate:1.3412,change:+0.07},
+  {flag:'🇨🇭',code:'CHF',name:'Swiss Franc',rate:0.8932,change:-0.04},
+  {flag:'🇧🇷',code:'BRL',name:'Brazilian Real',rate:4.9721,change:-0.31},
+  {flag:'🇲🇽',code:'MXN',name:'Mexican Peso',rate:17.42,change:+0.18},
+];
+
+function buildRates(data){
+  const tbody=document.getElementById('rates-body');
+  tbody.innerHTML=data.map(r=>`
+    <tr>
+      <td><span class="flag">${r.flag}</span><span class="curr-name">${r.code}</span><br><span class="curr-full">${r.name}</span></td>
+      <td style="font-family:'Syne',sans-serif;font-weight:800;">${r.rate.toFixed(4)}</td>
+      <td><span class="rate-badge ${r.change>=0?'rate-up':'rate-dn'}">${r.change>=0?'▲':'▼'} ${Math.abs(r.change).toFixed(2)}%</span></td>
+      <td><button onclick="goSend()" style="padding:.35rem .9rem;background:var(--primary-light);color:var(--primary);border:none;border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer;">Send ${r.code}</button></td>
+    </tr>
+  `).join('');
+}
+buildRates(ratesData);
+
+function filterRates(q){
+  buildRates(ratesData.filter(r=>r.code.toLowerCase().includes(q.toLowerCase())||r.name.toLowerCase().includes(q.toLowerCase())));
+}
+
+// ── HISTORY DATA
+const histData = [
+  {date:'Mar 8, 2026',name:'Maria Kowalski',amount:'-$250.00',curr:'EUR',type:'sent',status:'completed'},
+  {date:'Mar 7, 2026',name:'James Doe',amount:'+$1,500.00',curr:'USD',type:'received',status:'completed'},
+  {date:'Mar 5, 2026',name:'Sofia Lim',amount:'-$420.00',curr:'SGD',type:'sent',status:'completed'},
+  {date:'Mar 4, 2026',name:'Freelance Payment',amount:'+$820.00',curr:'GBP',type:'received',status:'completed'},
+  {date:'Mar 3, 2026',name:'Tom Nguyen',amount:'-$180.00',curr:'EUR',type:'sent',status:'pending'},
+  {date:'Mar 2, 2026',name:'Netflix Subscription',amount:'-$15.99',curr:'USD',type:'sent',status:'completed'},
+  {date:'Mar 1, 2026',name:'Client Refund',amount:'+$320.00',curr:'USD',type:'received',status:'completed'},
+  {date:'Feb 28, 2026',name:'Ali Hassan',amount:'-$95.00',curr:'AED',type:'sent',status:'failed'},
+];
+
+function buildHist(data){
+  const tbody=document.getElementById('hist-body');
+  tbody.innerHTML=data.map(t=>`
+    <tr>
+      <td style="color:var(--muted);font-size:.8rem;">${t.date}</td>
+      <td style="font-weight:600;">${t.name}</td>
+      <td style="font-family:'Syne',sans-serif;font-weight:800;color:${t.type==='sent'?'var(--red)':'var(--green)'};">${t.amount}</td>
+      <td style="color:var(--muted);">${t.curr}</td>
+      <td><span class="status-badge status-${t.status}">${t.status.charAt(0).toUpperCase()+t.status.slice(1)}</span></td>
+    </tr>
+  `).join('');
+}
+buildHist(histData);
+
+function filterTx(btn,type){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  buildHist(type==='all'?histData:histData.filter(t=>type==='pending'?t.status==='pending':t.type===type));
+}
+
+// ── NAVIGATION
+function showApp(){
+  document.getElementById('landing').style.display='none';
+  const app=document.getElementById('app');
+  app.style.display='flex';
+  document.getElementById('float-help').style.display='flex';
+}
+function showLanding(){
+  document.getElementById('app').style.display='none';
+  document.getElementById('landing').style.display='flex';
+  document.getElementById('float-help').style.display='none';
+  document.getElementById('float-widget').classList.remove('open');
+}
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.sb-link').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+function goSend(){
+  showPage('send', document.querySelectorAll('.sb-link')[1]);
+}
+
+// ── SEND STEPS
+function nextStep(n){
+  document.querySelectorAll('[id^="send-step"]').forEach(s=>s.style.display='none');
+  document.getElementById('send-step'+n).style.display='block';
+  [1,2,3].forEach(i=>{
+    const el=document.getElementById('step'+i);
+    el.classList.remove('active','done');
+    if(i<n) el.classList.add('done');
+    else if(i===n) el.classList.add('active');
+  });
+  if(n===3){
+    const amt=document.getElementById('s-amount').value;
+    const recv=document.getElementById('s-recv').value;
+    const from=document.getElementById('s-from').value.split(' ')[0];
+    const to=document.getElementById('s-to').value.split(' ')[0];
+    document.getElementById('confirm-send').textContent=`$${parseFloat(amt).toFixed(2)} ${from}`;
+    document.getElementById('confirm-recv').textContent=`${parseFloat(recv).toFixed(2)} ${to}`;
+  }
+}
+
+function confirmSend(){
+  document.getElementById('success-modal').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('success-modal').classList.remove('show');
+  nextStep(1);
+  showPage('dashboard', document.querySelectorAll('.sb-link')[0]);
+}
+
+// ── RATE CALC
+const fx={
+  'USD':1,'EUR':0.9251,'GBP':0.7843,'JPY':149.32,'INR':83.12,
+  'NGN':1540,'CAD':1.3621,'SGD':1.3412
+};
+function getCode(str){return str.split(' ')[0];}
+
+function calcRate(){
+  const amt=parseFloat(document.getElementById('send-amount').value)||0;
+  const from=getCode(document.getElementById('from-curr').value);
+  const to=getCode(document.getElementById('to-curr').value);
+  const rate=(fx[to]||1)/(fx[from]||1);
+  document.getElementById('recv-amount').value=(amt*rate).toFixed(2);
+  document.getElementById('rate-display').textContent=`${rate.toFixed(4)} ${to}`;
+}
+
+function swapCurr(){
+  const f=document.getElementById('from-curr');
+  const t=document.getElementById('to-curr');
+  const tmp=f.value;
+  f.value=t.value; t.value=tmp;
+  calcRate();
+}
+
+function updateConvert(){
+  const amt=parseFloat(document.getElementById('s-amount').value)||0;
+  const from=getCode(document.getElementById('s-from').value);
+  const to=getCode(document.getElementById('s-to').value);
+  const rate=(fx[to]||1)/(fx[from]||1);
+  document.getElementById('s-recv').value=(amt*rate).toFixed(2);
+  document.getElementById('s-rate-display').textContent=`1 ${from} = ${rate.toFixed(4)} ${to}`;
+}
+
+// ── AI HELP CHAT
+const SYSTEM_PROMPT = `You are FlowPay's friendly and knowledgeable customer support AI assistant. FlowPay is a money transfer platform supporting local and international transfers in 150+ countries with no hidden fees and real mid-market exchange rates.
+
+Key facts:
+- Transfers typically arrive in minutes (bank transfers up to 1-2 business days)
+- No transfer fees — FlowPay earns on exchange rate margin
+- Supports 30+ currencies including USD, EUR, GBP, JPY, NGN, INR, SGD, CAD, AUD
+- 256-bit AES encryption, 2FA, fully regulated
+- Users can send, receive, hold multi-currency wallets, view transaction history
+- To cancel a transfer: only possible if status is "Pending" — go to Transactions and tap Cancel
+- Identity verification requires government ID + selfie (processed in 1-2 hours)
+- Business accounts support bulk payouts and API access
+
+Keep replies concise, friendly, and helpful. Use bullet points for lists. Always stay on topic about FlowPay services.`;
+
+async function callAI(messages, outputEl, chatBoxEl) {
+  // Show typing indicator
+  const typingId = 'typing-' + Date.now();
+  const typingEl = document.createElement('div');
+  typingEl.className = 'chat-msg bot typing';
+  typingEl.id = typingId;
+  typingEl.innerHTML = `<div class="chat-avatar bot-av">🤖</div><div class="chat-bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>`;
+  chatBoxEl.appendChild(typingEl);
+  chatBoxEl.scrollTop = chatBoxEl.scrollHeight;
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: messages
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.map(b => b.text || '').join('') || 'Sorry, I could not get a response. Please try again.';
+
+    // Remove typing indicator
+    document.getElementById(typingId)?.remove();
+
+    // Add bot reply
+    const botEl = document.createElement('div');
+    botEl.className = 'chat-msg bot';
+    botEl.innerHTML = `<div class="chat-avatar bot-av">🤖</div><div class="chat-bubble">${reply.replace(/\n/g,'<br/>')}</div>`;
+    chatBoxEl.appendChild(botEl);
+    chatBoxEl.scrollTop = chatBoxEl.scrollHeight;
+    return reply;
+  } catch(e) {
+    document.getElementById(typingId)?.remove();
+    const errEl = document.createElement('div');
+    errEl.className = 'chat-msg bot';
+    errEl.innerHTML = `<div class="chat-avatar bot-av">🤖</div><div class="chat-bubble">Sorry, something went wrong. Please try again.</div>`;
+    chatBoxEl.appendChild(errEl);
+    chatBoxEl.scrollTop = chatBoxEl.scrollHeight;
+    return null;
+  }
+}
+
+// Main help page chat history
+let helpHistory = [];
+
+function addUserMsg(text, chatBoxEl, avContent) {
+  const el = document.createElement('div');
+  el.className = 'chat-msg user';
+  el.innerHTML = `<div class="chat-avatar user-av">${avContent}</div><div class="chat-bubble">${text}</div>`;
+  chatBoxEl.appendChild(el);
+  chatBoxEl.scrollTop = chatBoxEl.scrollHeight;
+}
+
+async function sendHelp() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  const chatBox = document.getElementById('chat-box');
+  addUserMsg(text, chatBox, 'AJ');
+  helpHistory.push({ role: 'user', content: text });
+  const reply = await callAI(helpHistory, null, chatBox);
+  if (reply) helpHistory.push({ role: 'assistant', content: reply });
+}
+
+function askTopic(q) {
+  document.getElementById('chat-input').value = q;
+  sendHelp();
+}
+
+// Floating chat history
+let floatHistory = [];
+
+async function sendFloat() {
+  const input = document.getElementById('float-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  const chatBody = document.getElementById('float-chat-body');
+  addUserMsg(text, chatBody, 'AJ');
+  floatHistory.push({ role: 'user', content: text });
+  const reply = await callAI(floatHistory, null, chatBody);
+  if (reply) floatHistory.push({ role: 'assistant', content: reply });
+}
+
+function openFloatChat() {
+  document.getElementById('float-widget').classList.add('open');
+  document.getElementById('float-help').style.display = 'none';
+}
+function closeFloatChat() {
+  document.getElementById('float-widget').classList.remove('open');
+  document.getElementById('float-help').style.display = 'flex';
+}
+
+</body>
+</html>
